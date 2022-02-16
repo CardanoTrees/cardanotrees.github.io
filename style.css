@@ -1,0 +1,56 @@
+body {
+  background: #f4f4f4;
+}
+
+.banner {
+  background: #a770ef;
+  background: -webkit-linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
+  background: linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
+}
+
+.bg-white img{
+	cursor: pointer;
+}
+
+.text-dark {
+	cursor: pointer;
+}
+
+.filter-button{
+    font-size: 12px;
+    border: 2px solid #3F6184;
+	padding:5px 10px;
+    text-align: center;
+    color: #3F6184;
+    margin-bottom: 30px;
+	background:transparent;
+}
+.filter-button:hover,
+.filter-button:focus,
+.filter-button.active{
+    color: #ffffff;
+    background-color:#3F6184;
+	outline:none;
+}
+
+.filter-button2{
+    font-size: 12px;
+    border: 2px solid #3F6184;
+	padding:5px 10px;
+    text-align: center;
+    color: black;
+    margin-bottom: 30px;
+	background:transparent;
+}
+.filter-button2:hover,
+.filter-button2:focus,
+.filter-button2.active{
+    color: #ffffff;
+    background-color:#3F6184;
+	outline:none;
+}
+
+#gallery-modal .modal-img{
+	width: 100%;
+	height: 100%;
+}

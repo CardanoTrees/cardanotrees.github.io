@@ -1,0 +1,350 @@
+ <head>
+    <style>
+    {
+        box-sizing: border-box;
+    }
+    /* Set additional styling options for the columns */
+    .column {
+    float: left;
+	width: 18%;
+    }
+
+    .row:after {
+    content: "";
+    display: table;
+    clear: both;
+    }
+	
+    .border-left {
+    border-left: 2px solid black;
+    }
+    </style>
+ </head>
+
+
+
+<h1>CardanoTrees Add-Ons Merge Tool</h1>
+
+<div>
+<label>Wallet address:</label>
+<input type="text" id="wallet" value="" size="100">
+<button type="button" onclick="conect()">Conect</button>
+</div>
+<br>
+
+<div class="row">
+<div class="column border-left">
+<label for="SM">Choose Sun/Moon</label>
+<select id="SM" onchange="change()">
+  <option value="SM">None</option>
+</select><br>
+<label> X position </label><input id="smx" type="number" min="0" max="1" value="0.7" step=".01"><br>
+<label> Y position </label><input id="smy" type="number" min="0" max="1" value="0.25" step=".01"><br>
+<label> Radius </label><input id="smr" type="number" min="0" max="1" value="0.1" step=".01"><br>
+</div>
+
+<div class="column border-left">
+<label for="FW">Choose Fireworks</label>
+<select id="FW" onchange="change()">
+  <option value="FW">None</option>
+</select><br>
+<label> Month </label><input id="fwm" type="number" min="0" max="12" value="1" step="1"><br>
+<label> Day </label><input id="fwd" type="number" min="0" max="31" value="1" step="1"><br>
+<label> Hour </label><input id="fwh" type="number" min="0" max="24" value="0" step="1"><br>
+<label> Minutes </label><input id="fwmin" type="number" min="0" max="60" value="0" step="1"><br>
+<label> Duration[min] </label><input id="fwt" type="number" min="0" max="525600" value="30" step="1"><br>
+<label> UTC TimeZone </label><input id="fwutc" type="number" min="-12" max="12" value="12" step="1"><br>
+<select id="fwlg">
+  <option value="L">Local time</option>
+  <option value="G">Global time</option>
+</select><br>
+<label> X init pos </label><input id="fwxi" type="number" min="0" max="1" value="0" step="0.01"><br>
+<label> X final pos </label><input id="fwxf" type="number" min="0" max="1" value="1" step="0.01"><br>
+</div>
+
+<div class="column border-left">
+<label for="FP1">Choose a Fancy Plant:</label>
+<select id="FP1" onchange="change()">
+  <option value="FP1">None</option>
+</select><br>
+<label> X position </label><input id="fp1x" type="number" min="0" max="1" value="0.5" step=".01"><br>
+<label> Y position </label><input id="fp1y" type="number" min="0" max="1" value="0.95" step=".01"><br>
+<label> Scale X </label><input id="fp1sx" type="number" min="0" max="1" value="1" step=".01"><br>
+<label> Scale Y </label><input id="fp1sy" type="number" min="0" max="1" value="1" step=".01"><br>
+</div>
+
+<div class="column border-left">
+<label for="FP2">Choose a Fancy Plant:</label>
+<select id="FP2" onchange="change()">
+  <option value="FP2">None</option>
+</select><br>
+<label> X position </label><input id="fp2x" type="number" min="0" max="1" value="0.5" step=".01"><br>
+<label> Y position </label><input id="fp2y" type="number" min="0" max="1" value="0.95" step=".01"><br>
+<label> Scale X </label><input id="fp2sx" type="number" min="0" max="1" value="1" step=".01"><br>
+<label> Scale Y </label><input id="fp2sy" type="number" min="0" max="1" value="1" step=".01"><br>
+</div>
+
+<div class="column border-left">
+<label for="FP3">Choose a Fancy Plant:</label>
+<select id="FP3" onchange="change()">
+  <option value="FP3">None</option>
+</select><br>
+<label> X position </label><input id="fp3x" type="number" min="0" max="1" value="0.5" step=".01"><br>
+<label> Y position </label><input id="fp3y" type="number" min="0" max="1" value="0.95" step=".01"><br>
+<label> Scale X </label><input id="fp3sx" type="number" min="0" max="1" value="1" step=".01"><br>
+<label> Scale Y </label><input id="fp3sy" type="number" min="0" max="1" value="1" step=".01"><br>
+</div>
+</div>
+<br>
+<button type="button" onclick="change()">Apply</button>
+<!--<button type="button" onclick="maximize()">Maximize</button>-->
+<button type="submit">
+<a style="text-decoration: none;color: inherit;" onclick="this.href='data:text/html;charset=UTF-8,'+T" href="#" download="Display.html">Download</a>
+</button>
+<div>
+<iframe name="Display" src="" style='height: 50%; width: 50%;' frameborder="0" scrolling="no" id="iframe">
+</iframe>
+</div>
+
+<script>
+function conect(){
+wa=document.getElementById("wallet").value;
+
+let tempData = null;
+assets = [];
+getTemp();
+function getTemp(){
+
+	fetch('https://api.koios.rest/api/v0/address_info?_address='+wa)
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(data) {
+			tempData = data;
+			sa=tempData[0].stake_address;
+
+	fetch('https://api.koios.rest/api/v0/account_assets?_address='+sa)
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(data) {
+			tempData = data;
+			//console.log(tempData);
+			for (var ii = 0; ii < tempData.length; ii++) {
+			  if (tempData[ii].asset_policy == '78168d51b7b81e155fb13ccc195685d5ca022e9947c95a0cc314f7d6'){
+			    //console.log(tempData[ii].asset_name)
+				assets.push(tempData[ii].asset_name)
+			  }
+			}
+			//console.log(assets);
+			addoptions(assets);	
+			// Actualiza opciones
+		});
+		
+		});
+
+}
+}
+</script>
+
+<script>
+function addoptions(lista){
+  selectSM = document.getElementById( 'SM' );
+  selectFW = document.getElementById( 'FW' );
+  selectFP1 = document.getElementById( 'FP1' );
+  selectFP2 = document.getElementById( 'FP2' );
+  selectFP3 = document.getElementById( 'FP3' );
+  for ( i = 0; i <= lista.length; i += 1 ) {
+    if(lista[i].includes('SM')){
+	  option = document.createElement( 'option' );
+      option.value = option.text = lista[i];
+      selectSM.add( option );
+	}
+    if(lista[i].includes('FW')){
+	  option = document.createElement( 'option' );
+      option.value = option.text = lista[i];
+      selectFW.add( option );
+	}
+    if(lista[i].includes('FP')){
+	  option = document.createElement( 'option' );
+      option.value = option.text = lista[i];
+      selectFP1.add( option );
+	  option = document.createElement( 'option' );
+      option.value = option.text = lista[i];
+	  selectFP2.add( option );
+	  option = document.createElement( 'option' );
+      option.value = option.text = lista[i];
+	  selectFP3.add( option );
+	}	
+  }
+}
+</script>
+
+
+<script>
+function loadFile(filePath) {
+  var result = null;
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("GET", filePath, false);
+  xmlhttp.send();
+  if (xmlhttp.status==200) {
+    result = xmlhttp.responseText;
+  }
+  return result;
+}
+</script>
+
+<script>
+t1 = "<html><style>*{margin:0; padding:0;}html, body {width:100%; height:100%;}myCanvas { display:block;}</style><title>DisplayNFT</title><body><section><div id='canvasesdiv' style='position:relative; width:100%; height:100%'>";
+t2 = ""
+for (var i = 1; i < 7; i++) {
+  t2=t2+"<canvas id='layer"+i.toString()+"' style='z-index:"+i.toString()+";position:absolute;left:0px;top:0px;'></canvas>";
+}
+
+t9 = "<script>"
+
+t14 = "var WIDTH = window.innerWidth; var HEIGHT = window.innerHeight;"
+t15=""
+for (var i = 1; i < 7; i++) {
+  t15=t15+"canvas"+i.toString()+".width = WIDTH; canvas"+i.toString()+".height = HEIGHT;"
+}
+t19="function resizeCanvas() {WIDTH = window.innerWidth; HEIGHT = window.innerHeight;"
+for (var i = 1; i < 7; i++) {
+  t19=t19+"canvas"+i.toString()+".width = WIDTH; canvas"+i.toString()+".height = HEIGHT;"
+}
+t19=t19+"location.reload();}"
+t19b = "function SMI1(){};function SMD1(){};function SMI2(){};function SMD2(){};function FWI1(){};function FWD1(){};function FP1I1(){};function FP1D1(){};function FP2I1(){};function FP2D1(){};function FP3I1(){};function FP3D1(){};"
+
+t22 = "window.addEventListener('resize', resizeCanvas, false);InitAll();<"
+t22a = "/script></section></body></html>"
+
+T=""
+
+function setIframe(html){
+document.getElementById('iframe').src = "data:text/html;charset=utf-8," + html
+}
+
+setIframe(T);
+
+//const winUrl = URL.createObjectURL(
+//    new Blob([T2], { type: "text/html" })
+//);
+
+//setTimeout(function(){
+   //setIframe(T2);
+   //var win = window.open(winUrl,"win");
+   //document.open();
+   //document.write(T2);
+   //document.close();
+//},4000);
+
+function maximize() {
+   document.open();
+   document.write(T);
+   document.close();
+}
+
+function change() {
+  var x = document.getElementById("FP1").value;
+  var nx = document.getElementById("fp1x").value;
+  var ny = document.getElementById("fp1y").value;
+  var sx = document.getElementById("fp1sx").value;
+  var sy = document.getElementById("fp1sy").value;
+  var x2 = document.getElementById("FP2").value;
+  var nx2 = document.getElementById("fp2x").value;
+  var ny2 = document.getElementById("fp2y").value;
+  var sx2 = document.getElementById("fp2sx").value;
+  var sy2 = document.getElementById("fp2sy").value;  
+  var x3 = document.getElementById("FP3").value;
+  var nx3 = document.getElementById("fp3x").value;
+  var ny3 = document.getElementById("fp3y").value;
+  var sx3 = document.getElementById("fp3sx").value;
+  var sy3 = document.getElementById("fp3sy").value;  
+  tfp1 = loadFile(x+'.txt')
+  tfp2 = loadFile(x2+'.txt') 
+  tfp3 = loadFile(x3+'.txt') 
+
+  var xfw = document.getElementById("FW").value;
+  tfw = loadFile(xfw+'.txt')  
+
+  var xsm = document.getElementById("SM").value;
+  tsm = loadFile(xsm+'.txt')
+  
+  if (x == "FP1"){tfp1=""}
+  if (x2 == "FP2"){tfp2=""}
+  if (x3 == "FP3"){tfp3=""}
+  if (xfw == "FW"){tfw=""}
+  if (xsm == "SM"){tsm=""} 
+  
+  var smx = document.getElementById("smx").value;  
+  var smy = document.getElementById("smy").value; 
+  var smr = document.getElementById("smr").value; 
+
+  var fwm = document.getElementById("fwm").value; 
+  var fwd = document.getElementById("fwd").value; 
+  var fwh = document.getElementById("fwh").value; 
+  var fwmin = document.getElementById("fwmin").value; 
+  var fwt = document.getElementById("fwt").value; 
+  var fwutc = document.getElementById("fwutc").value; 
+  var fwlg = document.getElementById("fwlg").value; 
+  var fwxi = document.getElementById("fwxi").value; 
+  var fwxf = document.getElementById("fwxf").value; 
+  
+  //---  
+  var op = document.getElementById("FP1").getElementsByTagName("option");
+  for (var i = 0; i < op.length; i++) {
+	op[i].disabled = false ;
+  }
+  var op = document.getElementById("FP2").getElementsByTagName("option");
+  for (var i = 0; i < op.length; i++) {
+	op[i].disabled = false ;
+  }
+  var op = document.getElementById("FP3").getElementsByTagName("option");
+  for (var i = 0; i < op.length; i++) {
+	op[i].disabled = false ;
+  }  
+  //---
+  var op = document.getElementById("FP2").getElementsByTagName("option");
+  for (var i = 0; i < op.length; i++) {
+	if ((op[i].value !== "FP2")&&(op[i].value == x)) {op[i].disabled = true;}
+  }
+  var op = document.getElementById("FP3").getElementsByTagName("option");
+  for (var i = 0; i < op.length; i++) {
+	if ((op[i].value !== "FP3")&&(op[i].value == x)) {op[i].disabled = true;}
+  }
+  //---  
+  var op = document.getElementById("FP1").getElementsByTagName("option");
+  for (var i = 0; i < op.length; i++) {
+	if ((op[i].value !== "FP1")&&(op[i].value == x2)) {op[i].disabled = true;}
+  }
+  var op = document.getElementById("FP3").getElementsByTagName("option");
+  for (var i = 0; i < op.length; i++) {
+	if ((op[i].value !== "FP3")&&(op[i].value == x2)) {op[i].disabled = true;}
+  }
+  //--- 
+  var op = document.getElementById("FP1").getElementsByTagName("option");
+  for (var i = 0; i < op.length; i++) {
+	if ((op[i].value !== "FP1")&&(op[i].value == x3)) {op[i].disabled = true;}
+  }
+  var op = document.getElementById("FP2").getElementsByTagName("option");
+  for (var i = 0; i < op.length; i++) {
+	if ((op[i].value !== "FP2")&&(op[i].value == x3)) {op[i].disabled = true;}
+  }
+  //--- 
+
+  t10 = "const canvas1 = document.getElementById('layer1'); const "+xsm+"ctx1 = canvas1.getContext('2d');"
+  t11 = "const canvas2 = document.getElementById('layer2'); const "+xsm+"ctx2 = canvas2.getContext('2d');"
+  t12 = "const canvas3 = document.getElementById('layer3'); const "+xfw+"ctx1 = canvas3.getContext('2d');"
+  t13 = "const canvas4 = document.getElementById('layer4'); const "+x+"ctx1 = canvas4.getContext('2d');"
+  t13b = "const canvas5 = document.getElementById('layer5'); const "+x2+"ctx1 = canvas5.getContext('2d');"
+  t13c = "const canvas6 = document.getElementById('layer6'); const "+x3+"ctx1 = canvas6.getContext('2d');"
+
+  t20 = "function InitAll(){"+xsm+"I1();"+xsm+"I2();"+xfw+"I1("+fwm+","+fwd+","+fwh+","+fwmin+","+fwt+","+fwutc+",'"+fwlg+"',"+fwxi+","+fwxf+");"+x+"I1();"+x2+"I1();"+x3+"I1();DrawAll();}"
+  
+  t21 = "function DrawAll(){"+xsm+"D1();"+xsm+"D2("+smr+","+smx+","+smy+");"+xfw+"D1();"+x+"D1("+nx+","+ny+","+sx+","+sy+");"+x2+"D1("+nx2+","+ny2+","+sx2+","+sy2+");"+x3+"D1("+nx3+","+ny3+","+sx3+","+sy3+");}" 
+  
+  T = t1+t2+tfp1+tfp2+tfp3+tfw+tsm+t9+t10+t11+t12+t13+t13b+t13c+t14+t15+t19+t19b+t20+t21+t22+t22a;
+  
+  setIframe(T);
+}
+</script>
