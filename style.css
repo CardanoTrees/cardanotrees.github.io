@@ -3,9 +3,7 @@ body {
 }
 
 .banner {
-  background: #a770ef;
-  background: -webkit-linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
-  background: linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
+  background: rgb(0, 80, 0);
 }
 
 .bg-white img{
