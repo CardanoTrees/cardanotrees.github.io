@@ -293,7 +293,12 @@ function getTemp(off){
 			    console.log(ii)
 			    console.log(tempData[ii].asset_name)
 				if(tempData.length>0){assets.push(tempData[ii].asset_name)}
-			  }			  
+			  }
+			  if (tempData[ii].asset_policy == '4bfa713fc28cdd2d5e2adb518ef1265f715e39ee5af0f7be14bfa8bf'){
+			    console.log(ii)
+			    console.log(tempData[ii].asset_name)
+				if(tempData.length>0){assets.push(tempData[ii].asset_name)}
+			  }        
 			}
 			console.log(assets);
 			if(tempData.length>0){addoptions(assets);}	
