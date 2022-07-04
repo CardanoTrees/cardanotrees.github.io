@@ -359,9 +359,10 @@ function addoptions(lista){
 	  option = document.createElement( 'option' );
       option.value = option.text = lista[i];
 	  selectFP3.add( option );
+    if(lista[i].includes('CTB')){}else{
 	  option = document.createElement( 'option' );
       option.value = option.text = lista[i];
-	  selectCT0.add( option );
+	  selectCT0.add( option );}
 	}
   }
 }
