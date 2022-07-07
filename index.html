@@ -473,8 +473,11 @@ function change() {
   var xcto = document.getElementById("CT0").value;  
   
   tfp1 = loadFile(x+'.txt')
-  tfp2 = loadFile(x2+'.txt') 
+  if(x.includes('CTB')){tfp1=tfp1.replace("},16)}","},10000)}")}
+  tfp2 = loadFile(x2+'.txt')
+  if(x2.includes('CTB')){tfp2=tfp2.replace("},16)}","},10000)}")}
   tfp3 = loadFile(x3+'.txt')
+  if(x3.includes('CTB')){tfp3=tfp3.replace("},16)}","},10000)}")}
   
   tcto = loadFile(xcto+'.txt') 
 
