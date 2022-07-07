@@ -129,7 +129,7 @@
       <div class="gallery_product col-sm">
         <div class="bg-white rounded shadow-sm">
           <div class="p-1">
-			<label for="FP1">Tree/Plant:</label>
+			<label for="FP1">Tree/Bonsai:</label>
 			<select id="FP1" style="font-size:12px;" onchange="change()">
 			  <option value="FP1">None</option>
 			</select><br>
@@ -137,6 +137,11 @@
 			<label> Y position </label><input id="fp1y" type="number" min="0" max="1" value="0.95" step=".01"><br>
 			<label> Scale X </label><input id="fp1sx" type="number" min="0" max="1" value="1" step=".01"><br>
 			<label> Scale Y </label><input id="fp1sy" type="number" min="0" max="1" value="1" step=".01"><br>
+      <label for="FP1">Bonsai Pot</label>
+			<select style="font-size:12px;" id="fp1p">
+			  <option value="Y">Yes</option>
+			  <option value="N">No</option>
+			</select><br>
           </div>
         </div>
       </div>
@@ -145,7 +150,7 @@
       <div class="gallery_product col-sm">
         <div class="bg-white rounded shadow-sm">
           <div class="p-1">
-			<label for="FP2">Tree/Plant:</label>
+			<label for="FP2">Tree/Bonsai:</label>
 			<select id="FP2" style="font-size:12px;" onchange="change()">
 			  <option value="FP2">None</option>
 			</select><br>
@@ -153,6 +158,11 @@
 			<label> Y position </label><input id="fp2y" type="number" min="0" max="1" value="0.95" step=".01"><br>
 			<label> Scale X </label><input id="fp2sx" type="number" min="0" max="1" value="1" step=".01"><br>
 			<label> Scale Y </label><input id="fp2sy" type="number" min="0" max="1" value="1" step=".01"><br>
+      <label for="FP2">Bonsai Pot</label>
+			<select style="font-size:12px;" id="fp2p">
+			  <option value="Y">Yes</option>
+			  <option value="N">No</option>
+			</select><br>
           </div>
         </div>
       </div>
@@ -161,7 +171,7 @@
       <div class="gallery_product col-sm">
         <div class="bg-white rounded shadow-sm">
           <div class="p-1">
-			<label for="FP3">Tree/Plant:</label>
+			<label for="FP3">Tree/Bonsai:</label>
 			<select id="FP3" style="font-size:12px;" onchange="change()">
 			  <option value="FP3">None</option>
 			</select><br>
@@ -169,6 +179,11 @@
 			<label> Y position </label><input id="fp3y" type="number" min="0" max="1" value="0.95" step=".01"><br>
 			<label> Scale X </label><input id="fp3sx" type="number" min="0" max="1" value="1" step=".01"><br>
 			<label> Scale Y </label><input id="fp3sy" type="number" min="0" max="1" value="1" step=".01"><br>
+      <label for="FP3">Bonsai Pot</label>
+			<select style="font-size:12px;" id="fp3p">
+			  <option value="Y">Yes</option>
+			  <option value="N">No</option>
+			</select><br>
           </div>
         </div>
       </div>	  
@@ -439,17 +454,22 @@ function change() {
   var ny = document.getElementById("fp1y").value;
   var sx = document.getElementById("fp1sx").value;
   var sy = document.getElementById("fp1sy").value;
+  var fp1p = document.getElementById("fp1p").value;
+
   var x2 = document.getElementById("FP2").value;
   var nx2 = document.getElementById("fp2x").value;
   var ny2 = document.getElementById("fp2y").value;
   var sx2 = document.getElementById("fp2sx").value;
   var sy2 = document.getElementById("fp2sy").value;  
+  var fp2p = document.getElementById("fp2p").value;
+
   var x3 = document.getElementById("FP3").value;
   var nx3 = document.getElementById("fp3x").value;
   var ny3 = document.getElementById("fp3y").value;
   var sx3 = document.getElementById("fp3sx").value;
   var sy3 = document.getElementById("fp3sy").value;
-  
+  var fp3p = document.getElementById("fp3p").value;
+
   var xcto = document.getElementById("CT0").value;  
   
   tfp1 = loadFile(x+'.txt')
@@ -580,20 +600,20 @@ function change() {
 
   t20 = "function InitAll(){"+xsm+"I1();"+xsm+"I2();"+xfw+"I1("+fwm+","+fwd+","+fwh+","+fwmin+","+fwt+","+fwutc+",'"+fwlg+"',"+fwxi+","+fwxf+");"
   if(x.includes('FP')){t20=t20+x+"I1();"}else{t20=t20+x+"I2();"}
-  if(x.includes('CTB')){t20=t20+x+"I3();"}
+  if(x.includes('CTB') && fp1p=="Y"){t20=t20+x+"I3();"}
   if(x2.includes('FP')){t20=t20+x2+"I1();"}else{t20=t20+x2+"I2();"}
-  if(x2.includes('CTB')){t20=t20+x2+"I3();"}
+  if(x2.includes('CTB') && fp2p=="Y"){t20=t20+x2+"I3();"}
   if(x3.includes('FP')){t20=t20+x3+"I1();"}else{t20=t20+x3+"I2();"}
-  if(x3.includes('CTB')){t20=t20+x3+"I3();"}
+  if(x3.includes('CTB') && fp3p=="Y"){t20=t20+x3+"I3();"}
   t20=t20+xcto+"I1();"+xcto+"I2();"+xcto+"I3();"+xcto+"I4();DrawAll();}"
   
   t21 = "function DrawAll(){"+xsm+"D1();"+xsm+"D2("+smr+","+smx+","+smy+");"+xfw+"D1();" 
   if(x.includes('FP')){t21=t21+x+"D1("+nx+","+ny+","+sx+","+sy+");"}else{t21=t21+x+"D2("+nx+","+ny+","+sx+","+sy+");"}
-  if(x.includes('CTB')){t21=t21+x+"D3("+nx+","+ny+","+sx+","+sy+");"}
+  if(x.includes('CTB') && fp1p=="Y"){t21=t21+x+"D3("+nx+","+ny+","+sx+","+sy+");"}
   if(x2.includes('FP')){t21=t21+x2+"D1("+nx2+","+ny2+","+sx2+","+sy2+");"}else{t21=t21+x2+"D2("+nx2+","+ny2+","+sx2+","+sy2+");"}
-  if(x2.includes('CTB')){t21=t21+x2+"D3("+nx2+","+ny2+","+sx2+","+sy2+");"}
+  if(x2.includes('CTB') && fp2p=="Y"){t21=t21+x2+"D3("+nx2+","+ny2+","+sx2+","+sy2+");"}
   if(x3.includes('FP')){t21=t21+x3+"D1("+nx3+","+ny3+","+sx3+","+sy3+");"}else{t21=t21+x3+"D2("+nx3+","+ny3+","+sx3+","+sy3+");"}
-  if(x3.includes('CTB')){t21=t21+x3+"D3("+nx3+","+ny3+","+sx3+","+sy3+");"}
+  if(x3.includes('CTB') && fp3p=="Y"){t21=t21+x3+"D3("+nx3+","+ny3+","+sx3+","+sy3+");"}
   t21=t21+xcto+"D1();"+xcto+"D2(0.5,1,1,1);"+xcto+"D3();"+xcto+"D4();}"
  
   T = t1+t2+tfp1+tfp2+tfp3+tfw+tsm+tcto+t9+t9b+t10+t11+t12+t13+t13o1+t13b+t13o2+t13c+t13o3+t13d+t13e+t13f+t14+t15+t19+t19b+t20+t21+t22+t22a;
