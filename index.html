@@ -276,7 +276,7 @@ getTemp('7000');
 getTemp('8000');
 getTemp('9000');
 function getTemp(off){
-	fetch('https://api.koios.rest/api/v0/address_info?_address='+wa)
+	fetch('https://api.koios.rest/api/v0/address_info?_addresses={'+wa+"}")
 		.then(function(response) {
 			return response.json();
 		})
@@ -284,35 +284,47 @@ function getTemp(off){
 			tempData = data;
 			sa=tempData[0].stake_address;
 
-	fetch('https://api.koios.rest/api/v0/account_assets?_address='+sa+'&offset='+off+'&limit=1000')
+	fetch('https://api.koios.rest/api/v0/account_assets?_stake_addresses={'+sa+'}&offset='+off+'&limit=1000')
 		.then(function(response) {
 			return response.json();
 		})
 		.then(function(data) {
 			tempData = data;
-			console.log(tempData);console.log(tempData.length);
+			console.log(tempData[0].assets);console.log(tempData[0].assets.length);
 			assets.splice(0, 0);
 			assets=[];
-			for (var ii = 0; ii < tempData.length; ii++) {
-			  if (tempData[ii].asset_policy == '78168d51b7b81e155fb13ccc195685d5ca022e9947c95a0cc314f7d6'){
+			for (var ii = 0; ii < tempData[0].assets.length; ii++) {
+			  if (tempData[0].assets[ii].policy_id == '78168d51b7b81e155fb13ccc195685d5ca022e9947c95a0cc314f7d6'){
 			    console.log(ii)
-			    console.log(tempData[ii].asset_name)
-				if(tempData.length>0){assets.push(tempData[ii].asset_name)}
+			    console.log(tempData[0].assets[ii].assets)
+          for (var jj = 0; jj < tempData[0].assets[ii].assets.length; jj++) {
+            assets.push(tempData[0].assets[ii].assets[jj].asset_name_ascii);
+          }
+				//if(tempData.length>0){assets.push(tempData[ii].asset_name)}
 			  }
-			  if (tempData[ii].asset_policy == 'e09e4f4217669b7f735b7a3724e835d8d6344db128eb03d6ea72885e'){
+			  if (tempData[0].assets[ii].policy_id == 'e09e4f4217669b7f735b7a3724e835d8d6344db128eb03d6ea72885e'){
 			    console.log(ii)
-			    console.log(tempData[ii].asset_name)
-				if(tempData.length>0){assets.push(tempData[ii].asset_name)}
+			    console.log(tempData[0].assets[ii].assets)
+          for (var jj = 0; jj < tempData[0].assets[ii].assets.length; jj++) {
+            assets.push(tempData[0].assets[ii].assets[jj].asset_name_ascii);
+          }
+				//if(tempData.length>0){assets.push(tempData[ii].asset_name)}
 			  }
-			  if (tempData[ii].asset_policy == '03928bd24b6afb832bf94503c73f8e46380e7c32b6ec3907ca100adb'){
+			  if (tempData[0].assets[ii].policy_id == '03928bd24b6afb832bf94503c73f8e46380e7c32b6ec3907ca100adb'){
 			    console.log(ii)
-			    console.log(tempData[ii].asset_name)
-				if(tempData.length>0){assets.push(tempData[ii].asset_name)}
+			    console.log(tempData[0].assets[ii].assets)
+          for (var jj = 0; jj < tempData[0].assets[ii].assets.length; jj++) {
+            assets.push(tempData[0].assets[ii].assets[jj].asset_name_ascii);
+          }
+				//if(tempData.length>0){assets.push(tempData[ii].asset_name)}
 			  }
-			  if (tempData[ii].asset_policy == '4bfa713fc28cdd2d5e2adb518ef1265f715e39ee5af0f7be14bfa8bf'){
+			  if (tempData[0].assets[ii].policy_id == '4bfa713fc28cdd2d5e2adb518ef1265f715e39ee5af0f7be14bfa8bf'){
 			    console.log(ii)
-			    console.log(tempData[ii].asset_name)
-				if(tempData.length>0){assets.push(tempData[ii].asset_name)}
+			    console.log(tempData[0].assets[ii].assets)
+          for (var jj = 0; jj < tempData[0].assets[ii].assets.length; jj++) {
+            assets.push(tempData[0].assets[ii].assets[jj].asset_name_ascii);
+          }
+				//if(tempData.length>0){assets.push(tempData[ii].asset_name)}
 			  }        
 			}
 			console.log(assets);
