@@ -1,4 +1,4 @@
- <head>
+<head>
     <style>
     {
         box-sizing: border-box;
@@ -263,69 +263,91 @@ wa=document.getElementById("wallet").value;
   option.value = 'CT0'; option.text = 'None';
   selectCT0.add( option );
 
+function hex_to_ascii(str1){
+	var hex  = str1.toString();
+	var str = '';
+	for (var n = 0; n < hex.length; n += 2) {
+		str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+	}
+	return str;
+ }
+ 
 let tempData = null;
 var assets = [];
-getTemp('0');
-getTemp('1000');
-getTemp('2000');
-getTemp('3000');
-getTemp('4000');
-getTemp('5000');
-getTemp('6000');
-getTemp('7000');
-getTemp('8000');
-getTemp('9000');
+getTemp('0-999');
+getTemp('1000-1999');
+getTemp('2000-2999');
+getTemp('3000-3999');
+getTemp('4000-4999');
+getTemp('5000-5999');
+getTemp('6000-6999');
+getTemp('7000-7999');
+getTemp('8000-8999');
+getTemp('9000-9999');
 function getTemp(off){
-	fetch('https://api.koios.rest/api/v0/address_info?_addresses={'+wa+"}")
+	//fetch('https://api.koios.rest/api/v0/address_info?_addresses={'+wa+"}")
+
+    fetch('https://api.koios.rest/api/v0/address_info', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            '_addresses': [
+                wa
+            ]
+        })
+    })
 		.then(function(response) {
 			return response.json();
 		})
 		.then(function(data) {
 			tempData = data;
 			sa=tempData[0].stake_address;
+    
+    console.log('respuesta')
+            console.log(sa)
 
-	fetch('https://api.koios.rest/api/v0/account_assets?_stake_addresses={'+sa+'}&offset='+off+'&limit=1000')
+	//fetch('https://api.koios.rest/api/v0/account_assets?_stake_addresses={'+sa+'}&offset='+off+'&limit=1000')
+    fetch('https://api.koios.rest/api/v0/account_assets', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Range': off
+        },
+        body: JSON.stringify({
+            '_stake_addresses': [
+                sa
+            ]
+        })
+    })
+
 		.then(function(response) {
 			return response.json();
 		})
 		.then(function(data) {
 			tempData = data;
-			console.log(tempData[0].assets);console.log(tempData[0].assets.length);
+			console.log(tempData[0].asset_list);
+            console.log(tempData[0].asset_list.length);
 			assets.splice(0, 0);
 			assets=[];
-			for (var ii = 0; ii < tempData[0].assets.length; ii++) {
-			  if (tempData[0].assets[ii].policy_id == '78168d51b7b81e155fb13ccc195685d5ca022e9947c95a0cc314f7d6'){
-			    console.log(ii)
-			    console.log(tempData[0].assets[ii].assets)
-          for (var jj = 0; jj < tempData[0].assets[ii].assets.length; jj++) {
-            assets.push(tempData[0].assets[ii].assets[jj].asset_name_ascii);
-          }
-				//if(tempData.length>0){assets.push(tempData[ii].asset_name)}
-			  }
-			  if (tempData[0].assets[ii].policy_id == 'e09e4f4217669b7f735b7a3724e835d8d6344db128eb03d6ea72885e'){
-			    console.log(ii)
-			    console.log(tempData[0].assets[ii].assets)
-          for (var jj = 0; jj < tempData[0].assets[ii].assets.length; jj++) {
-            assets.push(tempData[0].assets[ii].assets[jj].asset_name_ascii);
-          }
-				//if(tempData.length>0){assets.push(tempData[ii].asset_name)}
-			  }
-			  if (tempData[0].assets[ii].policy_id == '03928bd24b6afb832bf94503c73f8e46380e7c32b6ec3907ca100adb'){
-			    console.log(ii)
-			    console.log(tempData[0].assets[ii].assets)
-          for (var jj = 0; jj < tempData[0].assets[ii].assets.length; jj++) {
-            assets.push(tempData[0].assets[ii].assets[jj].asset_name_ascii);
-          }
-				//if(tempData.length>0){assets.push(tempData[ii].asset_name)}
-			  }
-			  if (tempData[0].assets[ii].policy_id == '4bfa713fc28cdd2d5e2adb518ef1265f715e39ee5af0f7be14bfa8bf'){
-			    console.log(ii)
-			    console.log(tempData[0].assets[ii].assets)
-          for (var jj = 0; jj < tempData[0].assets[ii].assets.length; jj++) {
-            assets.push(tempData[0].assets[ii].assets[jj].asset_name_ascii);
-          }
-				//if(tempData.length>0){assets.push(tempData[ii].asset_name)}
-			  }        
+            console.log('Cantidad de assets')
+            console.log(tempData[0].asset_list.length)
+			for (var ii = 0; ii < tempData[0].asset_list.length; ii++) {
+                policiesid=['78168d51b7b81e155fb13ccc195685d5ca022e9947c95a0cc314f7d6','e09e4f4217669b7f735b7a3724e835d8d6344db128eb03d6ea72885e','03928bd24b6afb832bf94503c73f8e46380e7c32b6ec3907ca100adb','4bfa713fc28cdd2d5e2adb518ef1265f715e39ee5af0f7be14bfa8bf']
+                for (var jj = 0; jj < 4; jj++) {  
+                    if (tempData[0].asset_list[ii].policy_id == policiesid[jj]){
+                        console.log(ii)
+                        console.log(hex_to_ascii(tempData[0].asset_list[ii].asset_name))
+                        assets.push(hex_to_ascii(tempData[0].asset_list[ii].asset_name))
+                        //for (var jj = 0; jj < tempData[0].assets[ii].assets.length; jj++) {
+                        //    assets.push(tempData[0].assets[ii].assets[jj].asset_name_ascii);
+                        //}
+                        //if(tempData.length>0){assets.push(tempData[ii].asset_name)}
+                    }
+                }
 			}
 			console.log(assets);
 			if(tempData.length>0){addoptions(assets);}	
@@ -353,8 +375,12 @@ function addoptions(lista){
   selectFP2 = document.getElementById( 'FP2' );
   selectFP3 = document.getElementById( 'FP3' );
   selectCT0 = document.getElementById( 'CT0' );
-   
+  
+  console.log('Lista')
+  console.log(lista)
+  console.log(lista.length)
   for ( i = 0; i <= lista.length; i += 1 ) {
+    console.log(lista[i])
     if(lista[i].includes('SM')){
 	  option = document.createElement( 'option' );
       option.value = option.text = lista[i];
