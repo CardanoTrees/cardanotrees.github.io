@@ -275,15 +275,15 @@ function hex_to_ascii(str1){
 let tempData = null;
 var assets = [];
 getTemp('0-999');
-getTemp('1000-1999');
-getTemp('2000-2999');
-getTemp('3000-3999');
-getTemp('4000-4999');
-getTemp('5000-5999');
-getTemp('6000-6999');
-getTemp('7000-7999');
-getTemp('8000-8999');
-getTemp('9000-9999');
+//getTemp('1000-1999');
+//getTemp('2000-2999');
+//getTemp('3000-3999');
+//getTemp('4000-4999');
+//getTemp('5000-5999');
+//getTemp('6000-6999');
+//getTemp('7000-7999');
+//getTemp('8000-8999');
+//getTemp('9000-9999');
 function getTemp(off){
 	//fetch('https://api.koios.rest/api/v0/address_info?_addresses={'+wa+"}")
 
@@ -314,8 +314,9 @@ function getTemp(off){
         method: 'POST',
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Range': off
+            'Content-Type': 'application/json'
+           // 'Content-Type': 'application/json',
+           // 'Range': off
         },
         body: JSON.stringify({
             '_stake_addresses': [
