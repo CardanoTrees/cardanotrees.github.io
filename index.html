@@ -286,79 +286,85 @@ getTemp('0-999');
 //getTemp('9000-9999');
 function getTemp(off){
 	//fetch('https://api.koios.rest/api/v0/address_info?_addresses={'+wa+"}")
-
-    fetch('https://api.koios.rest/api/v0/address_info', {
-        method: 'POST',
+    fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+wa, {
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            '_addresses': [
-                wa
-            ]
-        })
+            'project_id': 'mainnetG28ucT4BoRb4cn3yTRIqTqmkICyYRGCU'
+        }
     })
 		.then(function(response) {
 			return response.json();
 		})
 		.then(function(data) {
 			tempData = data;
-			sa=tempData[0].stake_address;
+      console.log(tempData);
+			sa=tempData.stake_address;
+      ass=tempData.amount;
     
-    console.log('respuesta')
-            console.log(sa)
-
-	//fetch('https://api.koios.rest/api/v0/account_assets?_stake_addresses={'+sa+'}&offset='+off+'&limit=1000')
-    fetch('https://api.koios.rest/api/v0/account_assets', {
-        method: 'POST',
+      
+    fetch('https://cardano-mainnet.blockfrost.io/api/v0/accounts/'+sa+'/addresses', {
         headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-           // 'Content-Type': 'application/json',
-           // 'Range': off
-        },
-        body: JSON.stringify({
-            '_stake_addresses': [
-                sa
-            ]
-        })
+            'project_id': 'mainnetG28ucT4BoRb4cn3yTRIqTqmkICyYRGCU'
+        }
     })
-
-		.then(function(response) {
-			return response.json();
+    .then(function(response2){
+			return response2.json();
 		})
-		.then(function(data) {
-			tempData = data;
-			console.log(tempData[0].asset_list);
-            console.log(tempData[0].asset_list.length);
-			assets.splice(0, 0);
-			assets=[];
-            console.log('Cantidad de assets')
-            console.log(tempData[0].asset_list.length)
-			for (var ii = 0; ii < tempData[0].asset_list.length; ii++) {
+		.then(function(data2) {
+			tempData2 = data2;
+      console.log(tempData2);
+      for (var jj = 0; jj < tempData2.length; jj++) {
+        console.log('Address #'+jj.toString())
+        wa2 = tempData2[jj].address
+        
+        fetch('https://cardano-mainnet.blockfrost.io/api/v0/addresses/'+wa2, {
+        headers: {
+            'project_id': 'mainnetG28ucT4BoRb4cn3yTRIqTqmkICyYRGCU'
+        }
+        })
+		    .then(function(response3) {
+			    return response3.json();
+		    })      
+		    .then(function(data3) {
+          ass2=data3.amount;
+          assets=[];
+          console.log('Cantidad de assets')
+          console.log(ass2.length)
+			    for (var ii = 0; ii < ass2.length; ii++) {
                 policiesid=['78168d51b7b81e155fb13ccc195685d5ca022e9947c95a0cc314f7d6','e09e4f4217669b7f735b7a3724e835d8d6344db128eb03d6ea72885e','03928bd24b6afb832bf94503c73f8e46380e7c32b6ec3907ca100adb','4bfa713fc28cdd2d5e2adb518ef1265f715e39ee5af0f7be14bfa8bf']
                 for (var jj = 0; jj < 4; jj++) {  
-                    if (tempData[0].asset_list[ii].policy_id == policiesid[jj]){
-                        console.log(ii)
-                        console.log(hex_to_ascii(tempData[0].asset_list[ii].asset_name))
-                        assets.push(hex_to_ascii(tempData[0].asset_list[ii].asset_name))
+                    if (ass2[ii].unit.substring(0,56) == policiesid[jj]){
+                        //console.log(ii)
+                        console.log(hex_to_ascii(ass2[ii].unit.substring(56)))
+                        assets.push(hex_to_ascii(ass2[ii].unit.substring(56)))
                         //for (var jj = 0; jj < tempData[0].assets[ii].assets.length; jj++) {
                         //    assets.push(tempData[0].assets[ii].assets[jj].asset_name_ascii);
                         //}
                         //if(tempData.length>0){assets.push(tempData[ii].asset_name)}
                     }
                 }
-			}
-			console.log(assets);
-			if(tempData.length>0){addoptions(assets);}	
-			// Actualiza opciones
-		});
-		
-		});
+			    }
+			    //console.log(assets);// Actualiza opciones
+			    if(ass2.length>0){addoptions(assets);}	
+        })
+      }
+    })
 
+    //console.log('respuesta')
+    //console.log(sa)
+    //console.log(ass)
+    //console.log(ass[78])
+    //console.log(ass[78].unit.substring(56))
+    //console.log( hex2a(ass[78].unit.substring(56)));
+
+
+			
+		});
+  }
 }
-}
+//		});
+
+//}
+//}
 </script>
 
 <script>
